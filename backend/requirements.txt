@@ -1,0 +1,9 @@
+django==3.2
+djangorestframework
+markdown
+django-filter
+dj_rest_auth
+django-location-field
+Pillow
+django-taggit
+python-magic
