@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  title: "Places",
+  title: "",
   back: false,
   backClicked: false,
   backLink: "/",

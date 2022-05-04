@@ -1,11 +1,13 @@
+from django.utils.encoding import smart_text
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
+
 from taggit.serializers import (TagListSerializerField,
                                 TaggitSerializer)
-from rest_framework.validators import UniqueTogetherValidator
-from api_utils.fields import UUIDRelatedField
 
+from api_utils.fields import UUIDRelatedField
 from ..models import Item
-from space.models import Place
+from space.models import Place,Space
 
 
 class ItemSerializer(TaggitSerializer, serializers.ModelSerializer):
@@ -15,6 +17,8 @@ class ItemSerializer(TaggitSerializer, serializers.ModelSerializer):
         queryset=Place.objects.all(),
         uuid_field='uuid'
     )
+    
+    
     
     updated_by = serializers.SlugRelatedField(
         read_only=True,
@@ -54,3 +58,8 @@ class ItemSerializer(TaggitSerializer, serializers.ModelSerializer):
     def create(self,validated_data):
         validated_data['updated_by'] = self.get_request_user()
         return super().create(validated_data)
+    
+    def to_representation(self, instance):
+        data =  super().to_representation(instance)
+        data['space'] = smart_text(instance.place.space.uuid)
+        return data

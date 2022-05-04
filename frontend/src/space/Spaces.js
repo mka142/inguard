@@ -2,11 +2,10 @@ import { useEffect } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { fetchSpaces } from "./spaceSlice";
+import { fetchSpaces, setSelected as setSelectedSpace } from "./spaceSlice";
 import { setAppBar } from "../dashboard/appBarSlice";
 
-import Card from "../base/Card";
-import { Stack } from "@mui/material";
+import { Card, Stack } from "../base";
 
 import PullToRefresh from "../base/PullToRefresh";
 
@@ -14,6 +13,7 @@ const Spaces = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    props.setSelectedSpace(null);
     props.setAppBar({ back: false, title: "Spaces", add: false });
     if (!props.space.space.length) {
       props.fetchSpaces();
@@ -32,7 +32,7 @@ const Spaces = (props) => {
   return (
     <>
       <PullToRefresh onPull={props.fetchSpaces}>
-        <Stack spacing={1} m={1}>
+        <Stack>
           {!props.space.space.length && props.space.isLoading ? (
             <>
               <Card loading />
@@ -63,4 +63,5 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   fetchSpaces,
   setAppBar,
+  setSelectedSpace,
 })(Spaces);

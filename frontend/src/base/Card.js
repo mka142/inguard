@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -12,6 +13,8 @@ import "./Card.css";
 const imageSize = 100;
 
 const MyCard = (props) => {
+  const [imageExists, setImageExists] = useState(Boolean(props.image));
+
   const dimension = {
     width: props.imageSize || imageSize,
     height: props.imageSize || imageSize,
@@ -19,17 +22,24 @@ const MyCard = (props) => {
 
   const getImage = () => (
     <>
-      {props.image ? (
+      {props.image && imageExists ? (
         <Avatar
           sx={{
             ...dimension,
           }}
-          src={props.image}
           variant="rounded"
-        />
+        >
+          <img
+            src={props.image}
+            alt={props.title}
+            onError={(e) => {
+              setImageExists(false);
+            }}
+          />
+        </Avatar>
       ) : (
         <img
-          src={process.env.PUBLIC_URL + "image-holder.png"}
+          src={process.env.PUBLIC_URL + "/image-holder.png"}
           alt={props.title}
           {...dimension}
         />
@@ -48,6 +58,9 @@ const MyCard = (props) => {
           )}
         </Box>
         <Box display="flex" flexDirection="column" ml={1} width="100%">
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+            {props.loading ? <Skeleton /> : props.heading}
+          </Typography>
           <Typography variant="h5" component="h2">
             {props.loading ? <Skeleton /> : props.title}
           </Typography>
@@ -67,6 +80,16 @@ const MyCard = (props) => {
             )}
           </Typography>
         </Box>
+        {props.quantity !== undefined ? (
+          <Box my="auto" mr={2}>
+            <Typography
+              component="span"
+              variant="h6"
+            >
+              {props.loading ? <Skeleton /> : props.quantity}
+            </Typography>
+          </Box>
+        ) : null}
       </Box>
     </CardContent>
   );

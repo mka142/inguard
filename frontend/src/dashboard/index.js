@@ -9,6 +9,7 @@ const Dashboard = ({ appBar, ...props }) => {
   const navigate = useNavigate();
 
   const onGoBack = () => {
+    props.setBack({ backClicked: !appBar.backClicked });
     props.setBack({ back: false });
     navigate(appBar.backLink);
   };

@@ -1,26 +1,45 @@
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  useLocation,
+  matchPath,
+  Outlet,
+} from "react-router-dom";
 
 import { connect } from "react-redux";
 import { setSelected, fetchSpaces } from "./spaceSlice";
-import { setTitle, setBack, setAdd } from "../dashboard/appBarSlice";
+import { setSelected as setItemSelected } from "../item/itemSlice";
+import { setAppBar } from "../dashboard/appBarSlice";
 
 const Space = (props) => {
-  let { uuid } = useParams();
+  let { spaceUuid } = useParams();
+  let navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    props.setBack({ back: true, backUrl: "/" });
-    props.setAdd({ add: true });
-    if (!props.space.space.map((e) => e.uuid).includes(uuid)) {
-      props.fetchSpaces(uuid);
+    props.setItemSelected(null);
+    if (!props.space.space.map((e) => e.uuid).includes(spaceUuid)) {
+      props.fetchSpaces(spaceUuid);
     } else {
-      let space = props.space.space.find((e) => e.uuid === uuid);
-      props.setSelected({ selected: space.uuid });
-      props.setTitle(space.name);
+      let space = props.space.space.find((e) => e.uuid === spaceUuid);
+      props.setSelected(space.uuid);
+      props.setAppBar({
+        add: true,
+        title: space.name,
+        back: true,
+        backLink: "/",
+      });
     }
-  }, [uuid, props.space.space]);
+  }, [spaceUuid, props.space.space]);
 
-  return <></>;
+  useEffect(() => {
+    if (props.space.isError) {
+      navigate("/");
+    }
+  }, [props.space.isError]);
+
+  return <Outlet />;
 };
 
 const mapStateToProps = (state, props) => {
@@ -30,7 +49,6 @@ const mapStateToProps = (state, props) => {
 export default connect(mapStateToProps, {
   setSelected,
   fetchSpaces,
-  setTitle,
-  setBack,
-  setAdd,
+  setAppBar,
+  setItemSelected,
 })(Space);
