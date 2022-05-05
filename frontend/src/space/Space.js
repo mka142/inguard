@@ -1,12 +1,6 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
-import {
-  useParams,
-  useNavigate,
-  useLocation,
-  matchPath,
-  Outlet,
-} from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 
 import { connect } from "react-redux";
 import { setSelected, fetchSpaces } from "./spaceSlice";
@@ -20,18 +14,16 @@ import RoomIcon from "@mui/icons-material/Room";
 import { MenuDialog, MenuItem } from "../base";
 
 const Space = (props) => {
-  let { spaceUuid } = useParams();
   let navigate = useNavigate();
-  const location = useLocation();
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     props.setItemSelected(null);
-    if (!props.space.space.map((e) => e.uuid).includes(spaceUuid)) {
-      props.fetchSpaces(spaceUuid);
-    } else {
-      let space = props.space.space.find((e) => e.uuid === spaceUuid);
+    if (props.space.selected) {
+      let space = props.space.space.find(
+        (e) => e.uuid === props.space.selected
+      );
       props.setSelected(space.uuid);
       props.setAppBar({
         search: true,
@@ -39,10 +31,11 @@ const Space = (props) => {
         title: space.name,
         back: true,
         backLink: "/",
-        info: false, //change to true when addin space info panel
+        info: true, //change to true when addin space info panel
+        remove: false,
       });
     }
-  }, [spaceUuid, props.space.space]);
+  }, [props.space.selected]);
 
   useEffect(() => {
     if (props.space.isError) {
@@ -53,6 +46,7 @@ const Space = (props) => {
   return (
     <>
       <AppBarListener on="addClicked" onClick={() => setDialogOpen(true)} />
+      <AppBarListener on="infoClicked" onClick={() => navigate("detail")} />
       <MenuDialog
         title="Create new"
         open={dialogOpen}
@@ -63,7 +57,9 @@ const Space = (props) => {
         <MenuItem icon={<CategoryIcon />} onClick={() => navigate("new-item")}>
           Space Item
         </MenuItem>
-        <MenuItem icon={<RoomIcon />}>Space Place</MenuItem>
+        <MenuItem icon={<RoomIcon />} onClick={() => navigate("new-place")}>
+          Space Place
+        </MenuItem>
       </MenuDialog>
       <Outlet />
     </>
@@ -71,7 +67,10 @@ const Space = (props) => {
 };
 
 const mapStateToProps = (state, props) => {
-  return { space: state.space, addClicked: state.appBar.addClicked };
+  return {
+    space: state.space,
+    addClicked: state.appBar.addClicked,
+  };
 };
 
 export default connect(mapStateToProps, {

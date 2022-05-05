@@ -29,8 +29,8 @@ const MyBottomNavigation = () => {
 
   const config = {
     0: "/",
+    1: "/settings",
     //1: "/revents",
-    // 2: "/settings",
   };
 
   useEffect(() => {
@@ -65,13 +65,13 @@ const MyBottomNavigation = () => {
           }}
         >
           <BottomNavigationAction label="Home" icon={<HomeIcon />} />
+          {/*}
           <BottomNavigationAction
             disabled
             label="Recents"
             icon={<RestoreIcon />}
-          />
+        />*/}
           <BottomNavigationAction
-            disabled
             label="Settings"
             icon={<SvgIcon component={SettingsIcon} />}
           />

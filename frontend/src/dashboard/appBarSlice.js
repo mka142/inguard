@@ -13,6 +13,10 @@ const initialState = {
   loading: false,
   info: false,
   infoClicked: null,
+  edit: false,
+  editClicked: null,
+  remove: false,
+  removeClicked: null,
 };
 
 export const appSlice = createSlice({

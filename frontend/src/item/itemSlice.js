@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../api";
+import { errorHandler } from "../utils";
 
 const initialState = {
   items: [],
@@ -59,15 +60,17 @@ export const createItem = createAsyncThunk(
 );
 export const editItem = createAsyncThunk(
   "item/editItem",
-  async ({ uuid, formData }) => {
-    const response = await api({
-      method: "patch",
-      url: `item/item/${uuid}/`,
-      data: formData,
-      headers: { "Content-Type": "multipart/form-data" },
+  async ({ uuid, formData }, { rejectWithValue }) => {
+    return await errorHandler(rejectWithValue, async () => {
+      const response = await api({
+        method: "patch",
+        url: `item/item/${uuid}/`,
+        data: formData,
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      const data = await response.data;
+      return data;
     });
-    const data = await response.data;
-    return data;
   }
 );
 
@@ -77,6 +80,9 @@ export const itemSlice = createSlice({
   reducers: {
     setSelected: (state, action) => {
       state.selected = action.payload;
+    },
+    setError: (state, action) => {
+      state.error = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -126,7 +132,6 @@ export const itemSlice = createSlice({
     builder.addCase(createItem.rejected, (state, action) => {
       state.isLoading = false;
       state.isError = true;
-      console.log(action);
       state.error = action.payload;
     });
     builder.addCase(createItem.pending, (state, action) => {
@@ -141,10 +146,13 @@ export const itemSlice = createSlice({
         return e;
       });
       state.isLoading = false;
+      state.isError = false;
+      state.error = null;
     });
     builder.addCase(editItem.rejected, (state, action) => {
       state.isLoading = false;
       state.isError = true;
+      state.error = action.payload;
     });
     builder.addCase(editItem.pending, (state, action) => {
       state.isLoading = true;
@@ -153,5 +161,5 @@ export const itemSlice = createSlice({
   },
 });
 
-export const { setSelected } = itemSlice.actions;
+export const { setSelected, setError } = itemSlice.actions;
 export default itemSlice.reducer;

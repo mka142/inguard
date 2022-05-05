@@ -14,7 +14,15 @@ const Spaces = (props) => {
 
   useEffect(() => {
     props.setSelectedSpace(null);
-    props.setAppBar({ back: false, title: "Spaces", add: false });
+    props.setAppBar({
+      back: false,
+      title: "Spaces",
+      add: false,
+      edit: false,
+      search: false,
+      remove: false,
+      info: false,
+    });
     if (!props.space.space.length) {
       props.fetchSpaces();
     }

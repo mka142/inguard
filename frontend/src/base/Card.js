@@ -9,6 +9,7 @@ import {
   CardActionArea,
 } from "@mui/material";
 import "./Card.css";
+import { Img } from "../base";
 
 const imageSize = 100;
 
@@ -22,28 +23,14 @@ const MyCard = (props) => {
 
   const getImage = () => (
     <>
-      {props.image && imageExists ? (
-        <Avatar
-          sx={{
-            ...dimension,
-          }}
-          variant="rounded"
-        >
-          <img
-            src={props.image}
-            alt={props.title}
-            onError={(e) => {
-              setImageExists(false);
-            }}
-          />
-        </Avatar>
-      ) : (
-        <img
-          src={process.env.PUBLIC_URL + "/image-holder.png"}
-          alt={props.title}
-          {...dimension}
-        />
-      )}
+      <Avatar
+        sx={{
+          ...dimension,
+        }}
+        variant="rounded"
+      >
+        <Img src={props.image} {...dimension} alt={props.title} />
+      </Avatar>
     </>
   );
 
@@ -82,10 +69,7 @@ const MyCard = (props) => {
         </Box>
         {props.quantity !== undefined ? (
           <Box my="auto" mr={2}>
-            <Typography
-              component="span"
-              variant="h6"
-            >
+            <Typography component="span" variant="h6">
               {props.loading ? <Skeleton /> : props.quantity}
             </Typography>
           </Box>

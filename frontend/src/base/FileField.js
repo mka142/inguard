@@ -2,17 +2,33 @@ import React, { useCallback, useState } from "react";
 import { Field } from "react-final-form";
 import { useDropzone } from "react-dropzone";
 
-import { List, Box } from "@mui/material";
+import { List, Box, Experimental_CssVarsProvider } from "@mui/material";
+/*
+FileField for react-final-form
+*/
+const FileField = ({ name, render = null, ...props }) => {
+  /*
+  To render insiade FileField some jsx with accces to field props we pass main render arg
+  and later we pass render as _render to FileFieldInput which is a component to render.
 
-const FileField = ({ name, ...props }) => {
+  FileFieldInput renders just zone to drop files.
+  We can pass to FileField:
+    - children => no access to field props
+    - render => (func) access to field props
+  */
   return (
     <>
-      <Field name={name} {...props} component={FileFieldInput} />
+      <Field
+        name={name}
+        {...props}
+        _render={render}
+        component={FileFieldInput}
+      />
     </>
   );
 };
 
-function FileFieldInput({ required, input, dropZoneProps, ...props }) {
+function FileFieldInput({ required, input, dropZoneProps, _render, ...props }) {
   const onDrop = useCallback(
     (files) => {
       input.onChange(files);
@@ -39,7 +55,9 @@ function FileFieldInput({ required, input, dropZoneProps, ...props }) {
     <>
       <div {...getRootProps()}>
         <input {...getInputProps()} />
-        {props.children}
+        {_render
+          ? _render({ input, meta: props.meta, id: props.id })
+          : props.children}
       </div>
       <List>{files}</List>
     </>

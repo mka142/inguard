@@ -29,21 +29,18 @@ const ItemCreate = (props) => {
     }
   }, [props.space, spaceUuid]);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     data.image = data.image[0];
-    props.createItem({ space: spaceUuid, ...data });
+    const response = await props.createItem({ space: spaceUuid, ...data });
+    if (response.meta.requestStatus === "fulfilled") {
+      navigate(`../item/${props.selected}`);
+    }
   };
 
   useEffect(() => {
     if (props.isError) {
     }
   }, [props.isError]);
-
-  useEffect(() => {
-    if (props.selected) {
-      navigate(`../item/${props.selected}`);
-    }
-  }, [props.selected]);
 
   const parseErrors = () => {
     const errors = { ...props.error };

@@ -5,6 +5,7 @@ import {
   Box,
   Toolbar,
   IconButton,
+  Button,
   Collapse,
   Fade,
   FormControl,
@@ -16,6 +17,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import SearchOffIcon from "@mui/icons-material/SearchOff";
 import InfoIcon from "@mui/icons-material/Info";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 import "./AppBar.css";
 
@@ -28,13 +30,23 @@ export default ({
   add = true,
   loading = false,
   info = false,
+  edit = false,
+  remove = false,
   onInfo = () => {},
   onSearch = () => {},
   onAdd = () => {},
   onGoBack = () => {},
+  onEdit = () => {},
+  onRemove = () => {},
 }) => {
   const [searching, setSearching] = useState({ open: false, value: "" });
   const appBarRef = useRef(null);
+
+  useEffect(() => {
+    if (!search) {
+      setSearching({ open: false, value: "" });
+    }
+  }, [search]);
 
   useEffect(() => {
     onSearch(searching.value);
@@ -57,6 +69,13 @@ export default ({
     onAdd();
   };
 
+  const _onEdit = () => {
+    onEdit();
+  };
+  const _onRemove = () => {
+    onRemove();
+  };
+
   return (
     <>
       <Box position="sticky" top={0} zIndex={1100}>
@@ -72,7 +91,7 @@ export default ({
               </IconButton>
             ) : null}
             <Box flexGrow={2} display="flex" pr={1}>
-              <Typography variant="h6" component="div" my="auto" noWrap>
+              <Typography variant="h6" component="div" my="auto">
                 {title}
               </Typography>
               {info ? (
@@ -91,6 +110,8 @@ export default ({
                 <AddCircleIcon />
               </IconButton>
             ) : null}
+            {edit ? <Button onClick={_onEdit}>edit</Button> : null}
+            {remove ? <Button onClick={_onRemove}>Delete</Button> : null}
           </Toolbar>
         </AppBar>
         <Box top={appBarHeight} position="absolute" width="100%">

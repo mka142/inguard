@@ -13,7 +13,7 @@ class Item(UUIDModel):
     
     quantity = models.PositiveIntegerField(default=0)
     trash = models.BooleanField(default=False)
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
     
 class ItemUsage(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True)

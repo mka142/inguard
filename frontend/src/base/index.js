@@ -7,6 +7,8 @@ import PullToRefresh from "./PullToRefresh";
 import Img from "./Img";
 import FullAppContainer from "./FullAppContainer";
 import MenuDialog, { MenuItem } from "./MenuDialog";
+import DetailBox from "./DetailBox";
+import SimpleMap from "./SimpleMap";
 
 export {
   Stack,
@@ -19,4 +21,6 @@ export {
   FullAppContainer,
   MenuDialog,
   MenuItem,
+  DetailBox,
+  SimpleMap,
 };

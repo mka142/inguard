@@ -9,7 +9,8 @@ const Dashboard = ({ appBar, ...props }) => {
   const navigate = useNavigate();
 
   const onGoBack = () => {
-    props.setAppBar({ backClicked: !appBar.backClicked });
+    props.setChange("backClicked");
+    //props.setAppBar({ backClicked: !appBar.backClicked });
     props.setAppBar({ back: false });
     navigate(appBar.backLink);
   };
@@ -21,6 +22,15 @@ const Dashboard = ({ appBar, ...props }) => {
   const onAdd = () => {
     props.setChange("addClicked");
   };
+  const onEdit = () => {
+    props.setChange("editClicked");
+  };
+  const onRemove = () => {
+    props.setChange("removeClicked");
+  };
+  const onSearch = (query) => {
+    props.setAppBar({ searchQuery: query });
+  };
 
   return (
     <>
@@ -30,10 +40,15 @@ const Dashboard = ({ appBar, ...props }) => {
         title={appBar.title}
         back={appBar.back}
         add={appBar.add}
+        remove={appBar.remove}
         onAdd={onAdd}
         search={appBar.search}
+        onSearch={onSearch}
         loading={appBar.loading}
         onGoBack={onGoBack}
+        edit={appBar.edit}
+        onEdit={onEdit}
+        onRemove={onRemove}
       />
 
       <BottomNavigation />

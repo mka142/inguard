@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 ('quantity', models.PositiveIntegerField(default=0)),
                 ('trash', models.BooleanField(default=False)),
                 ('place', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='space.place')),
-                ('tags', taggit.managers.TaggableManager(help_text='A comma-separated list of tags.', through='taggit.TaggedItem', to='taggit.Tag', verbose_name='Tags')),
+                ('tags', taggit.managers.TaggableManager(help_text='A comma-separated list of tags.', through='taggit.TaggedItem', to='taggit.Tag', verbose_name='Tags', blank=True)),
                 ('updated_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
             ],
             options={

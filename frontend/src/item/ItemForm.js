@@ -7,6 +7,8 @@ import { useParams } from "react-router-dom";
 import { Form, Field } from "react-final-form";
 import FileField from "../base/FileField";
 
+import { Img } from "../base";
+
 import {
   FormControl,
   Button,
@@ -20,12 +22,19 @@ import {
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import ImageIcon from "@mui/icons-material/Image";
+import PropTypes from "prop-types";
 
+import FieldText from "../base/mui-final-form/FieldText";
+import FieldImage from "../base/mui-final-form/FieldImage";
+
+/*
+Form used to pass new data to create or update item
+*/
 const ItemForm = ({
   spaceUuid,
   initialValues = {},
   _error = {},
-  image,
+  image = null,
   ...props
 }) => {
   useEffect(() => {
@@ -62,102 +71,65 @@ const ItemForm = ({
           <form onSubmit={handleSubmit}>
             <Box display="flex" flexDirection="column">
               <Box my={1}>
-                <Field name="name">
-                  {({ meta, ...props }) => (
-                    <TextField
-                      {...props.input}
-                      fullWidth
-                      variant="standard"
-                      required
-                      error={meta.error && meta.touched}
-                      label="Name"
-                      helperText={meta.error && meta.touched ? meta.error : ""}
-                    />
-                  )}
-                </Field>
+                <FieldText name="name" label="Name" />
               </Box>
               <Box my={1}>
-                <Field name="description">
-                  {(props) => (
-                    <TextField
-                      variant="standard"
-                      fullWidth
-                      label="Description"
-                      multiline
-                      minRows={2}
-                      {...props.input}
-                    />
-                  )}
-                </Field>
+                <FieldText
+                  name="description"
+                  label="Description"
+                  multiline
+                  minRows={2}
+                />
               </Box>
               <Box my={1}>
                 <Field name="place" type="radio">
-                  {({ meta, ..._props }) => (
-                    <FormControl
-                      variant="standard"
-                      error={meta.error && meta.touched}
-                      fullWidth
-                      required
-                    >
-                      <FormLabel id="place_field">Place</FormLabel>
-                      <RadioGroup
-                        row
-                        aria-labelledby="place_field"
-                        {..._props.input}
+                  {({ meta, ..._props }) => {
+                    return (
+                      <FormControl
+                        variant="standard"
+                        error={meta.error && meta.touched}
+                        fullWidth
+                        required
                       >
-                        {props.place.place
-                          .filter((e) => e.space === spaceUuid)
-                          .map((e) => (
-                            <FormControlLabel
-                              key={e.uuid}
-                              value={e.uuid}
-                              control={<Radio />}
-                              label={e.name}
-                            />
-                          ))}
-                      </RadioGroup>
-                      <FormHelperText>
-                        {meta.error && meta.touched ? meta.error : ""}
-                      </FormHelperText>
-                    </FormControl>
-                  )}
+                        <FormLabel id="place_field">Place</FormLabel>
+                        <RadioGroup
+                          {...(meta.initial && { defaultValue: meta.initial })}
+                          row
+                          aria-labelledby="place_field"
+                          {..._props.input}
+                        >
+                          {props.place.place
+                            .filter((e) => e.space === spaceUuid)
+                            .map((e) => (
+                              <FormControlLabel
+                                key={e.uuid}
+                                value={e.uuid}
+                                control={<Radio />}
+                                label={e.name}
+                              />
+                            ))}
+                        </RadioGroup>
+                        <FormHelperText>
+                          {meta.error && meta.touched ? meta.error : ""}
+                        </FormHelperText>
+                      </FormControl>
+                    );
+                  }}
                 </Field>
               </Box>
               <Box my={1}>
-                <FormControl variant="standard" fullWidth>
-                  <FormLabel htmlFor="image_field">Image</FormLabel>
-                  <FileField
-                    id="image_field"
-                    name="image"
-                    dropZoneProps={{
-                      accept: { "image/*": [".jpeg", ".png"] },
-                      multiple: false,
-                    }}
-                  >
-                    <>
-                      <Button fullWidth variant="outlined">
-                        <ImageIcon />
-                      </Button>
-                      {image && !values.image ? (
-                        <Box display="flex" flexDirection="column">
-                          <img width={100} height={"auto"} src={props.image} />
-                        </Box>
-                      ) : (
-                        <></>
-                      )}
-                    </>
-                  </FileField>
-                </FormControl>
+                <FieldImage name="image" label="Image" image={image} />
               </Box>
               <Box my={4}>
                 <LoadingButton
+                  loading={props.loading}
                   variant="contained"
                   fullWidth
                   onClick={handleSubmit}
                 >
                   Save
                 </LoadingButton>
-                <FormHelperText error={_error.FORM_ERROR}>
+                <FormHelperText error={Boolean(_error.FORM_ERROR)}>
                   {_error.FORM_ERROR ? _error.FORM_ERROR : ""}
                 </FormHelperText>
               </Box>
@@ -167,6 +139,14 @@ const ItemForm = ({
       />
     </>
   );
+};
+ItemForm.propTypes = {
+  spaceUuid: PropTypes.string,
+  initialValues: PropTypes.object,
+  _error: PropTypes.shape({ FORM_ERROR: PropTypes.string }),
+  image: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  onSubmit: PropTypes.func,
+  loading: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => {

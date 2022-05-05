@@ -11,11 +11,9 @@ import { useNavigate } from "react-router-dom";
 
 const Items = (props) => {
   const navigate = useNavigate();
-  
 
   const fetchData = () => {
     props.fetchItems({ space: props.space.selected });
-    props.fetchPlaces({ space: props.space.selected });
   };
 
   const getItemPlace = (placeUUID) => {
@@ -52,10 +50,22 @@ const Items = (props) => {
     return <Empty title="No resources here yet" />;
   }
 
+  const search = () => {
+    return selectedSpaceItems().filter((e) => {
+      const nameSearch = e.name
+        .toLowerCase()
+        .includes(props.searchQuery.toLowerCase());
+      const descriptionSearch = (e.description || "")
+        .toLowerCase()
+        .includes(props.searchQuery.toLowerCase());
+      return nameSearch || descriptionSearch;
+    });
+  };
+
   return (
     <PullToRefresh onPull={fetchData}>
       <Stack>
-        {selectedSpaceItems().map((item) => (
+        {search().map((item) => (
           <Card
             onClick={() => itemOnClick(item.uuid)}
             key={item.uuid}
@@ -71,7 +81,12 @@ const Items = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  return { item: state.item, space: state.space, place: state.place };
+  return {
+    item: state.item,
+    space: state.space,
+    place: state.place,
+    searchQuery: state.appBar.searchQuery,
+  };
 };
 
 export default connect(mapStateToProps, { fetchItems, fetchPlaces, setAppBar })(
