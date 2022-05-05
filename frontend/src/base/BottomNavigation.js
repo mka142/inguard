@@ -12,7 +12,7 @@ import RestoreIcon from "@mui/icons-material/Restore";
 import HomeIcon from "@mui/icons-material/Home";
 import SettingsIcon from "@mui/icons-material/Settings";
 
-const bottomNavigationHeight = 56;
+export const bottomNavigationHeight = 56;
 
 export const MatchToBottomNavigation = ({ children }) => {
   return (

@@ -11,7 +11,7 @@ from space.models import Place,Space
 
 
 class ItemSerializer(TaggitSerializer, serializers.ModelSerializer):
-    tags = TagListSerializerField()
+    tags = TagListSerializerField(required=False)
 
     place = UUIDRelatedField(
         queryset=Place.objects.all(),
@@ -42,7 +42,8 @@ class ItemSerializer(TaggitSerializer, serializers.ModelSerializer):
         validators = [
             UniqueTogetherValidator(
                 queryset=Item.objects.all(),
-                fields=['place', 'name']
+                fields=['place', 'name'],
+                message="Item with this name already exists in such place."
             )
         ]
         

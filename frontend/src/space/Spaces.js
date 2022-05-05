@@ -25,7 +25,7 @@ const Spaces = (props) => {
   }, [props.space.isLoading]);
 
   const spaceOnClick = (uuid) => {
-    props.setAppBar({ back: true, backLink: "/" });
+    props.setAppBar({ back: true, backLink: "/", info: false });
     navigate(`/space/${uuid}`);
   };
 

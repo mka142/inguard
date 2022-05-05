@@ -1,9 +1,6 @@
 .title {
-  flex-grow: 2;
-
+  overflow: inherit !important;
 }
 .searching > .title {
   flex-grow: 1;
 }
-
-

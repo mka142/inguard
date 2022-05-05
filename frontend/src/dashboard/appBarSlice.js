@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { v4 as uuidv4 } from "uuid";
 
 const initialState = {
   title: "",
@@ -6,16 +7,26 @@ const initialState = {
   backClicked: false,
   backLink: "/",
   add: false,
-  addClicked: false,
+  addClicked: null,
   search: true,
   searchQuery: null,
   loading: false,
+  info: false,
+  infoClicked: null,
 };
 
 export const appSlice = createSlice({
   name: "appBar",
   initialState,
   reducers: {
+    setClear: (state, action) => {
+      //used to clear backClicked,addClicked,infoClicked
+      state[action.payload] = null;
+    },
+    setChange: (state, action) => {
+      // used to ping change backClicked, addClicked, infoClicked
+      state[action.payload] = uuidv4();
+    },
     setAppBar: (state, action) => {
       const previous = { ...state };
       const merged = { ...state, ...action.payload };
@@ -60,6 +71,14 @@ export const appSlice = createSlice({
     },
   },
 });
-export const { setTitle, setBack, setAdd, setSearch, setLoading, setAppBar } =
-  appSlice.actions;
+export const {
+  setTitle,
+  setBack,
+  setAdd,
+  setSearch,
+  setLoading,
+  setAppBar,
+  setClear,
+  setChange,
+} = appSlice.actions;
 export default appSlice.reducer;

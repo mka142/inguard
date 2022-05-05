@@ -7,8 +7,7 @@ import Auth from "./auth";
 import Spaces from "./space/Spaces";
 import Space from "./space/Space";
 
-import Items from "./item/Items";
-import Item from "./item/Item";
+import { Item, Items, ItemCreate } from "./item";
 
 import Dashboard from "./dashboard";
 import { MatchToBottomNavigation } from "./base/BottomNavigation";
@@ -41,6 +40,7 @@ function App() {
                             }
                           />
                           <Route path="item/:itemUuid" element={<Item />} />
+                          <Route path="new-item" element={<ItemCreate />} />
                         </Route>
                       </Routes>
                     </Container>

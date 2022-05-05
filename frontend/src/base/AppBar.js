@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   AppBar,
   Typography,
   Box,
   Toolbar,
   IconButton,
-  Slide,
+  Collapse,
   Fade,
   FormControl,
   Input,
@@ -14,8 +14,12 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import SearchOffIcon from "@mui/icons-material/SearchOff";
+import InfoIcon from "@mui/icons-material/Info";
 
 import "./AppBar.css";
+
+export const appBarHeight = 56;
 
 export default ({
   title,
@@ -23,11 +27,14 @@ export default ({
   search = true,
   add = true,
   loading = false,
+  info = false,
+  onInfo = () => {},
   onSearch = () => {},
   onAdd = () => {},
   onGoBack = () => {},
 }) => {
   const [searching, setSearching] = useState({ open: false, value: "" });
+  const appBarRef = useRef(null);
 
   useEffect(() => {
     onSearch(searching.value);
@@ -51,46 +58,70 @@ export default ({
   };
 
   return (
-    <Box position="sticky" top={0} zIndex={1100}>
-      <AppBar position="static" color="inherit">
-        <Toolbar variant="dense" className={`${searching ? "searching" : ""}`}>
-          {back ? (
-            <IconButton color="primary" onClick={_onGoBack}>
-              <ArrowBackIosIcon />
-            </IconButton>
-          ) : null}
-
-          <Typography variant="h6" component="div" pr={1} className="title">
-            {title}
-          </Typography>
-          {search ? (
-            <Box display="flex">
-              <Slide in={searching.open}>
-                <FormControl margin="dense">
-                  <Input
-                    placeholder="Search..."
-                    onChange={_onSearch}
-                    value={searching.value}
-                  />
-                </FormControl>
-              </Slide>
-
-              <IconButton size="large" onClick={onSearchToggle}>
-                <SearchIcon />
+    <>
+      <Box position="sticky" top={0} zIndex={1100}>
+        <AppBar position="static" color="inherit">
+          <Toolbar
+            sx={{ height: appBarHeight }}
+            variant="dense"
+            className={`${searching ? "searching" : ""}`}
+          >
+            {back ? (
+              <IconButton color="primary" onClick={_onGoBack}>
+                <ArrowBackIosIcon />
               </IconButton>
+            ) : null}
+            <Box flexGrow={2} display="flex" pr={1}>
+              <Typography variant="h6" component="div" my="auto" noWrap>
+                {title}
+              </Typography>
+              {info ? (
+                <IconButton onClick={onInfo}>
+                  <InfoIcon />
+                </IconButton>
+              ) : null}
             </Box>
-          ) : null}
-
-          {add ? (
-            <IconButton size="large" onClick={_onAdd}>
-              <AddCircleIcon />
-            </IconButton>
-          ) : null}
-        </Toolbar>
-      </AppBar>
-      <Fade in={loading} timeout={{ exit: 2000 }}>
-        <LinearProgress />
-      </Fade>
-    </Box>
+            {search ? (
+              <IconButton size="large" onClick={onSearchToggle}>
+                {searching.open ? <SearchOffIcon /> : <SearchIcon />}
+              </IconButton>
+            ) : null}
+            {add ? (
+              <IconButton size="large" onClick={_onAdd}>
+                <AddCircleIcon />
+              </IconButton>
+            ) : null}
+          </Toolbar>
+        </AppBar>
+        <Box top={appBarHeight} position="absolute" width="100%">
+          <Fade in={loading} timeout={{ exit: 2000 }}>
+            <LinearProgress />
+          </Fade>
+        </Box>
+      </Box>
+      <Box
+        square
+        ref={appBarRef}
+        zIndex={!searching.open ? 1 : 1000}
+        /*position="sticky"
+        top={appBarHeight}*/
+      >
+        <Collapse
+          in={searching.open}
+          direction="down"
+          container={appBarRef.current}
+        >
+          <Box display="flex">
+            <FormControl margin="dense" fullWidth sx={{ p: 2 }}>
+              <Input
+                placeholder="Search..."
+                onChange={_onSearch}
+                value={searching.value}
+              />
+            </FormControl>
+          </Box>
+        </Collapse>
+      </Box>
+    </>
   );
 };
