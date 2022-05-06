@@ -17,6 +17,7 @@ RUN npm run build
 # Section 1- Base Image
 FROM python:3.8-slim
 
+ENV DATA_DIR=/data
 ENV REACT_BUILD_DIR=/inguard/assets/build
 
 ENV DRBUG=0
@@ -33,7 +34,7 @@ COPY ./backend/requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt \
     && rm -rf /tmp/requirements.txt \
     && useradd -U inguard \
-    && install -d -m 755 -o inguard -g inguard /inguard /inguard/static /inguard/assets
+    && install -d -m 755 -o inguard -g inguard ${DATA_DIR} /inguard/assets 
 # Section 5- Code and User Setup
 
 WORKDIR /inguard
@@ -46,5 +47,3 @@ COPY --chown=inguard:inguard  ./backend .
 RUN chmod +x docker.entrypoint.sh
 # Section 6- Docker Run Checks and Configurations
 ENTRYPOINT [ "/inguard/docker.entrypoint.sh" ]
-
-#CMD [ "docker/start.sh", "server" ]

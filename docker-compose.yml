@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+  inguard:
+    image: mka142/inguard:latest
+    container_name: inguard
+    volumes:
+      - data:/data/
+    ports:
+      - 8000:8000
+    networks:
+      - net
+    environment:
+      - SECRET_KEY=
+      - ALLOWED_HOSTS=
+    restart: always
+volumes:
+  data:
+networks:
+  net:
+    external: true
