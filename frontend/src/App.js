@@ -1,3 +1,4 @@
+import { connect } from "react-redux";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import EnsureCsrftoken from "./auth/EnsureCsrftoken";
 import EnsureAuthentication from "./auth/EnsureAuthentication";
@@ -24,9 +25,11 @@ import { Container, CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { darkTheme, lightTheme } from "./theme";
 
-function App() {
+const themeConfig = { light: lightTheme, dark: darkTheme };
+
+function App({ theme }) {
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={themeConfig[theme]}>
       <CssBaseline />
       <EnsureCsrftoken>
         <CheckAuth>
@@ -97,4 +100,8 @@ function App() {
   );
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return { theme: state.appBar.theme };
+};
+
+export default connect(mapStateToProps)(App);

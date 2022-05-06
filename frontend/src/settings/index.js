@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 
 import About from "./About";
+import ThemeSwitch from "./ThemeSwitch";
 
 export default connect(null, { setAppBar })((props) => {
   const navigate = useNavigate();
@@ -46,6 +47,11 @@ export default connect(null, { setAppBar })((props) => {
             <Option title="About" to="about" />
             <Divider />
             <Option title="Logout" to="/logout" />
+            <Divider />
+            <ListItem>
+              <ThemeSwitch />
+            </ListItem>
+            <Divider />
           </List>
         }
       />

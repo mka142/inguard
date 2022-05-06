@@ -17,6 +17,7 @@ const initialState = {
   editClicked: null,
   remove: false,
   removeClicked: null,
+  theme: "light",
 };
 
 export const appSlice = createSlice({

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-artf+#r7r4p&ch5t9j4kmco@lk1r48*-4jgrxvx6%auutw+t@q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.environ.get('DEBUG',0))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -42,6 +43,8 @@ INSTALLED_APPS = [
     'django_filters',
     'location_field.apps.DefaultConfig',
     'taggit',
+    'django_react_toolkit',
+    'whitenoise',
     
     'account',
     'item',
@@ -50,6 +53,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -59,6 +63,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'backend.urls'
+
+DJANGO_PATHS = ['api','admin','media','static']
+
+REACT_ROOT_FILES = ['favicon.png', 'manifest.json', 'robots.txt','logo192.png','logo512.png']
 
 TEMPLATES = [
     {
@@ -125,10 +133,20 @@ USE_L10N = True
 USE_TZ = True
 
 
+REACT_BUILD_DIR = os.environ.get('REACT_BUILD_DIR',None)
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 STATIC_URL = '/static/'
+
+STATIC_ROOT = os.environ.get('STATIC_ROOT',BASE_DIR / 'static' )
+
+STATICFILES_DIRS = [
+    os.path.join(REACT_BUILD_DIR,'static')
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

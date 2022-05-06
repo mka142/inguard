@@ -12,5 +12,5 @@ export default (props) => {
   if (!error) {
     return <img {...props} onError={(e) => setError(true)} />;
   }
-  return <img {...props} src={process.env.PUBLIC_URL + "/image-holder.png"} />;
+  return <img {...props} src={process.env.PUBLIC_URL + "/static/image-holder.png"} />;
 };

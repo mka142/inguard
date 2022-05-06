@@ -7,3 +7,8 @@ django-location-field
 Pillow
 django-taggit
 python-magic
+django-react-toolkit
+gunicorn
+whitenoise
+# for gunicorn
+#eventlet
