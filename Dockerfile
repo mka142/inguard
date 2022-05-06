@@ -5,8 +5,8 @@ ENV NODE_OPTIONS=--openssl-legacy-provider
 WORKDIR /frontend
 
 COPY ./frontend/package*.json /frontend/
-
-RUN npm install
+# for github actions
+RUN npm install --legacy-peer-deps
 
 COPY ./frontend/ /frontend/
 
