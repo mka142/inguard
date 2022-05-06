@@ -26,15 +26,15 @@ DATA_DIR = Path(os.environ.get("DATA_DIR",BASE_DIR))
 SECRET_KEY = os.environ.get("SECRET_KEY",'django-insecure-art')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get('DEBUG',0))
+DEBUG = bool(os.environ.get('DEBUG',1))
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS",'*').split(" ")
 
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO',os.environ.get("HTTP_X_FORWARDED_PROTO",'http'))
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = bool(os.environ.get('SECURE_SSL_REDIRECT',True))
+    SESSION_COOKIE_SECURE = bool(os.environ.get('SESSION_COOKIE_SECURE',True))
+    CSRF_COOKIE_SECURE = bool(os.environ.get('CSRF_COOKIE_SECURE',False))
 
 # Application definition
 
@@ -140,7 +140,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-REACT_BUILD_DIR = os.environ.get('REACT_BUILD_DIR',None)
+REACT_BUILD_DIR = os.environ.get('REACT_BUILD_DIR','/')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -151,9 +151,10 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.environ.get('STATIC_ROOT',DATA_DIR / 'static' )
 
-STATICFILES_DIRS = [
-    os.path.join(REACT_BUILD_DIR,'static')
-]
+if not DEBUG:
+    STATICFILES_DIRS = [
+        os.path.join(REACT_BUILD_DIR,'static')
+    ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
