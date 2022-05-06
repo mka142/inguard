@@ -31,6 +31,7 @@ DEBUG = bool(os.environ.get('DEBUG',0))
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS",'*').split(" ")
 
 if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO',os.environ.get("HTTP_X_FORWARDED_PROTO",'http'))
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
