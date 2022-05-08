@@ -31,6 +31,6 @@ class PlaceSerializer(serializers.ModelSerializer):
         validators = [
             UniqueTogetherValidator(
                 queryset=Place.objects.all(),
-                fields=['name']
+                fields=['name','space']
             )
         ]
