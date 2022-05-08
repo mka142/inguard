@@ -1,6 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 
+const localStorageTheme = () => {
+  try {
+    return window.localStorage.getItem("theme") || "light";
+  } catch (e) {
+    return "light";
+  }
+};
+
 const initialState = {
   title: "",
   back: false,
@@ -17,7 +25,7 @@ const initialState = {
   editClicked: null,
   remove: false,
   removeClicked: null,
-  theme: "light",
+  theme: localStorageTheme(),
 };
 
 export const appSlice = createSlice({
