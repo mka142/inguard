@@ -5,7 +5,7 @@ import { setAppBar } from "../dashboard/appBarSlice";
 import { setSelected } from "./itemSlice";
 import { useNavigate } from "react-router-dom";
 
-import { Box, Typography, Grid } from "@mui/material";
+import { Box, Typography, Grid, Chip } from "@mui/material";
 
 import { Img, DetailBox } from "../base";
 import AppBarListener from "../dashboard/AppBarListener";
@@ -39,6 +39,14 @@ const ItemDetail = ({ item, space, place, ...props }) => {
         </Box>
         <DetailBox name="Name" value={item.name} />
         <DetailBox name="Description" value={item.description} />
+        <DetailBox
+          name="Tags"
+          value={
+            !item.tags.lenght
+              ? "No tags provided"
+              : item.tags.map((e) => <Chip key={e} label={e} />)
+          }
+        />
         <DetailBox name="Quantity" value={item.quantity} />
         <DetailBox name="Place" value={place.name} />
         <DetailBox name="Space" value={space.name} />

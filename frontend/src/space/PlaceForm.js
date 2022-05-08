@@ -38,9 +38,6 @@ const PlaceForm = ({
             errors.name = "Name is required";
           }
 
-          if (!values.description) {
-            errors.description = "Place is required";
-          }
           return errors;
         }}
         render={({ handleSubmit, values }) => (
@@ -55,6 +52,7 @@ const PlaceForm = ({
                   label="Description"
                   multiline
                   minRows={2}
+                  required={false}
                 />
               </Box>
               <Box my={1}>

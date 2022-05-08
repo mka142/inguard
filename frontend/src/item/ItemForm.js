@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { fetchPlaces } from "../space/placeSlice";
 import { fetchSpaces } from "../space/spaceSlice";
+import { fetchTags } from "./itemSlice";
 import { useParams } from "react-router-dom";
 
 import { Form, Field } from "react-final-form";
@@ -26,6 +27,7 @@ import PropTypes from "prop-types";
 
 import FieldText from "../base/mui-final-form/FieldText";
 import FieldImage from "../base/mui-final-form/FieldImage";
+import FieldAutoComplete from "../base/mui-final-form/FieldAutoComplete";
 
 /*
 Form used to pass new data to create or update item
@@ -39,6 +41,7 @@ const ItemForm = ({
 }) => {
   useEffect(() => {
     const space = props.space.space.find((e) => e.uuid === spaceUuid);
+    props.fetchTags();
     if (!space) {
       props.fetchSpaces();
     }
@@ -118,6 +121,13 @@ const ItemForm = ({
                 </Field>
               </Box>
               <Box my={1}>
+                <FieldAutoComplete
+                  options={props.tags.map((e) => e.name)}
+                  name="tags"
+                  label="Tags"
+                />
+              </Box>
+              <Box my={1}>
                 <FieldImage name="image" label="Image" image={image} />
               </Box>
               <Box my={4}>
@@ -153,7 +163,12 @@ const mapStateToProps = (state) => {
   return {
     space: state.space,
     place: state.place,
+    tags: state.item.tags,
   };
 };
 
-export default connect(mapStateToProps, { fetchPlaces, fetchSpaces })(ItemForm);
+export default connect(mapStateToProps, {
+  fetchPlaces,
+  fetchSpaces,
+  fetchTags,
+})(ItemForm);

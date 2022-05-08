@@ -4,11 +4,18 @@ import { errorHandler } from "../utils";
 
 const initialState = {
   items: [],
+  tags: [],
   selected: null,
   isLoading: false,
   isError: false,
   error: null,
 };
+
+export const fetchTags = createAsyncThunk("item/fetchTags", async () => {
+  const response = await api.get("item/tag/");
+  const data = await response.data;
+  return data;
+});
 
 export const fetchItems = createAsyncThunk(
   "item/fetchItems",
@@ -157,6 +164,9 @@ export const itemSlice = createSlice({
     builder.addCase(editItem.pending, (state, action) => {
       state.isLoading = true;
       state.isError = false;
+    });
+    builder.addCase(fetchTags.fulfilled, (state, action) => {
+      state.tags = action.payload;
     });
   },
 });

@@ -29,8 +29,10 @@ const ItemCreate = (props) => {
     }
   }, [props.space, spaceUuid]);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (_data) => {
+    const data = { ..._data };
     data.image = data.image[0];
+    data.tags = data.tags.join(",");
     const response = await props.createItem({ space: spaceUuid, ...data });
     if (response.meta.requestStatus === "fulfilled") {
       navigate(`../item/${props.selected}`);

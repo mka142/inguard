@@ -42,10 +42,13 @@ const ItemEdit = ({ item, ...props }) => {
     return () => props.setError(null);
   }, []);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (_data) => {
+    const data = { ..._data };
     if (data.image) {
       data.image = data.image[0];
     }
+    data.tags = JSON.stringify(data.tags);
+
     const response = await props.editItem({
       uuid: item.uuid,
       formData: { ...data },
@@ -74,6 +77,7 @@ const ItemEdit = ({ item, ...props }) => {
             name: item.name,
             description: item.description,
             place: item.place,
+            tags: item.tags,
           }}
           loading={props.isLoading}
           onSubmit={onSubmit}
