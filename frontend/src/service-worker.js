@@ -37,7 +37,8 @@ registerRoute(
       return false;
     } // If this looks like a URL for a resource, because it contains // a file extension, skip.
 
-    if (url.pathname.startsWIth("/admin")) { // for django admin panel
+    if (url.pathname.startsWith("/admin")) {
+      // for django admin panel
       return false;
     }
 
