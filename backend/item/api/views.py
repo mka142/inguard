@@ -1,6 +1,8 @@
-from rest_framework import viewsets,permissions
+from rest_framework import viewsets,permissions,mixins
 
-from .serializers import ItemSerializer
+from taggit.models import Tag
+
+from .serializers import ItemSerializer,TagSerializer
 from .filters import ItemFilter
 
 from ..models import Item
@@ -13,3 +15,8 @@ class ItemViewSet(RequestInContextAPIView,viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Item.objects.all()
     filterset_class = ItemFilter
+    
+class TagsViewSet(mixins.ListModelMixin,viewsets.GenericViewSet):
+    serializer_class = TagSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Tag.objects.all()

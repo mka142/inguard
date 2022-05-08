@@ -5,6 +5,8 @@ from rest_framework.validators import UniqueTogetherValidator
 from taggit.serializers import (TagListSerializerField,
                                 TaggitSerializer)
 
+from taggit.models import Tag
+
 from api_utils.fields import UUIDRelatedField
 from ..models import Item
 from space.models import Place,Space
@@ -64,3 +66,9 @@ class ItemSerializer(TaggitSerializer, serializers.ModelSerializer):
         data =  super().to_representation(instance)
         data['space'] = smart_text(instance.place.space.uuid)
         return data
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ['slug','name']
+        read_only_fields = ['slug','name']
