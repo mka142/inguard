@@ -73,7 +73,7 @@ ROOT_URLCONF = 'backend.urls'
 
 DJANGO_PATHS = ['api','admin','media','static']
 
-REACT_ROOT_FILES = ['favicon.png', 'manifest.json', 'robots.txt','logo192.png','logo512.png']
+REACT_ROOT_FILES = ['favicon.png', 'manifest.json', 'robots.txt','logo192.png','logo512.png','service-worker.js']
 
 TEMPLATES = [
     {
