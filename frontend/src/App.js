@@ -12,6 +12,7 @@ import {
   SpaceDetail,
   Spaces,
   Space,
+  PlaceDetail,
 } from "./space";
 import { Wrapers } from "./item";
 
@@ -81,6 +82,16 @@ function App({ theme }) {
                             </Route>
                             <Route path="new-item" element={<ItemCreate />} />
                             <Route path="new-place" element={<PlaceCreate />} />
+                            <Route
+                              path="place/:placeUuid"
+                              element={
+                                <SpaceWrapers.SetSelectedPlace>
+                                  <Outlet />
+                                </SpaceWrapers.SetSelectedPlace>
+                              }
+                            >
+                              <Route path="detail" element={<PlaceDetail />} />
+                            </Route>
                           </Route>
                           <Route path="/settings/*" element={<Settings />} />
                         </Routes>

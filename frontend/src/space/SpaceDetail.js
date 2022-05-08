@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { connect } from "react-redux";
 import { setAppBar } from "../dashboard/appBarSlice";
 
-import { DetailBox, Img, SimpleMap } from "../base";
+import { DetailBox, Img, SimpleMap, Link } from "../base";
 import { Box } from "@mui/material";
 
 const SpaceDetail = ({ space, ...props }) => {
@@ -30,7 +30,12 @@ const SpaceDetail = ({ space, ...props }) => {
         <DetailBox name="Name" value={space.name} />
         <DetailBox
           name="Places"
-          value={props.places.map((e) => e.name).join(", ")}
+          value={props.places.map((e) => (
+            <span key={e.uuid}>
+              <Link to={`../place/${e.uuid}/detail`}>{e.name}</Link>
+              {","}
+            </span>
+          ))}
         />
         <DetailBox name="Description" value={space.description} />
 

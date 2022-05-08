@@ -35,8 +35,8 @@ const Items = (props) => {
   }, [props.space.selected]);
 
   useEffect(() => {
-    props.setAppBar({ loading: props.place.isLoading });
-  }, [props.place.isLoading]);
+    props.setAppBar({ loading: props.item.isLoading });
+  }, [props.item.isLoading]);
 
   if (props.item.isLoading && selectedSpaceItems().length === 0) {
     return (

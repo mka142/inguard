@@ -9,6 +9,7 @@ import FullAppContainer from "./FullAppContainer";
 import MenuDialog, { MenuItem } from "./MenuDialog";
 import DetailBox from "./DetailBox";
 import SimpleMap from "./SimpleMap";
+import Link from "./Link";
 
 export {
   Stack,
@@ -23,4 +24,5 @@ export {
   MenuItem,
   DetailBox,
   SimpleMap,
+  Link,
 };

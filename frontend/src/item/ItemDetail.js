@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 import { Box, Typography, Grid, Chip } from "@mui/material";
 
-import { Img, DetailBox } from "../base";
+import { Img, DetailBox, Link } from "../base";
 import AppBarListener from "../dashboard/AppBarListener";
 
 const ItemDetail = ({ item, space, place, ...props }) => {
@@ -42,13 +42,20 @@ const ItemDetail = ({ item, space, place, ...props }) => {
         <DetailBox
           name="Tags"
           value={
-            !item.tags.lenght
+            !item.tags.length
               ? "No tags provided"
               : item.tags.map((e) => <Chip key={e} label={e} />)
           }
         />
         <DetailBox name="Quantity" value={item.quantity} />
-        <DetailBox name="Place" value={place.name} />
+        <DetailBox
+          name="Place"
+          value={
+            <Link to={`/space/${space.uuid}/place/${place.uuid}/detail/`}>
+              {place.name}
+            </Link>
+          }
+        />
         <DetailBox name="Space" value={space.name} />
       </Box>
     </>
